@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    env_file:
+      - .development.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:
+    image: app
+    build: .
+    container_name: rails
+    command: bin/rails server -b 0.0.0.0
+    volumes:
+      - .:/everydayrails-rspec-jp-2024
+      - bundle-data:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+      - .development.env
+
+volumes:
+  mysql-data:
+  bundle-data:
